@@ -6,7 +6,7 @@ CREATE TABLE user_table (
                 password   TEXT    NOT NULL,                   -- 해시된 비밀번호
                 email      TEXT    NOT NULL,
                 created_at TEXT    NOT NULL
-            )
+            );
 CREATE TABLE "survey_table" (
 	"id_num"	INTEGER NOT NULL,
 	"user_id"	TEXT,
@@ -22,4 +22,4 @@ CREATE TABLE "survey_table" (
 	"q10"	INTEGER,
 	"created_at"	TEXT,
 	PRIMARY KEY("id_num" AUTOINCREMENT)
-)
+);

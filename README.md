@@ -15,13 +15,16 @@
 - 기존 개인정보 입력은 SQLite `profile_table`에 저장
 - Tailwind CSS + Alpine.js를 Streamlit HTML 컴포넌트 영역에 적용
 - 기존 `data.csv`는 참고용으로 포함
+- **설문 참여** 메뉴: AI의 교육적 효과 인식 설문(10문항, 5점 척도) 응시 및 결과 시각화
 
 ## 디렉토리 구조
 
 ```text
 streamlit_myproject/
 ├─ app.py            # Streamlit 실행 파일 / 화면 / 세션 / 메뉴
-├─ db.py             # SQLite 연결, 테이블 생성, 인증 및 CRUD
+├─ db.py             # SQLite 연결, 테이블 생성, 인증 및 CRUD (survey_table 포함)
+├─ survey.py         # 설문 참여 메뉴: 설문응시 / 설문결과 시각화 탭
+├─ mycom.sql         # user_table, survey_table 생성 SQL
 ├─ myproject.db      # SQLite DB (초기 실행 또는 init 스크립트로 생성)
 ├─ data.csv          # 기존 CSV 데이터(참고용)
 ├─ requirements.txt  # Python 패키지 목록
@@ -75,6 +78,30 @@ streamlit run app.py
 - `address`
 - `phone`
 - `created_at`
+
+### survey_table
+
+`mycom.sql`의 스키마를 그대로 사용하며, 앱 실행 시 없으면 자동 생성됩니다.
+
+- `id_num`: INTEGER PRIMARY KEY AUTOINCREMENT
+- `user_id`: TEXT (로그인 아이디 `userid`)
+- `q1` ~ `q10`: INTEGER (1=전혀 아니다, 2=아니다, 3=보통이다, 4=그렇다, 5=매우 그렇다)
+- `created_at`: TEXT (응답 제출 시점의 현재 날짜·시간, `YYYY-MM-DD HH:MM:SS`)
+
+사용자당 1건의 응답을 유지하며, 다시 제출하면 기존 응답과 `created_at`이 갱신됩니다.
+
+## 설문 참여 메뉴
+
+로그인 후 왼쪽 메뉴의 **설문 참여**를 선택하면 두 개의 탭이 표시됩니다.
+
+1. **설문응시**: AI의 교육적 효과에 대한 인식 10문항(이해도 향상, 학습 효율성, 개별화 학습, 피드백, 학습 동기, 창의성, 비판적 사고, 진로 역량, 교육 필요성, 전반적 효과)에 5점 척도로 응답
+2. **설문결과 시각화**
+   - 요약 지표: 응답자 수, 전체 평균, 긍정 응답률(4·5점), Cronbach's α
+   - 문항별 평균 막대그래프(중간값 3점 기준선)
+   - 문항별 응답 분포 100% 누적 막대그래프
+   - 문항별 기술통계표(N, 평균, 표준편차, 중앙값, 최빈값, 점수별 빈도·비율, 긍정률)
+   - 문항 상세 보기(선택 문항의 응답 분포 및 내 응답)
+   - 응답 일자별 참여 추이, 원자료·통계표 CSV 다운로드
 
 ## 참고
 

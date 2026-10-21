@@ -8,6 +8,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from db import add_profile, authenticate_user, create_user, get_profiles, init_db
+from survey import render_survey_page
 
 st.set_page_config(
     page_title="MyProject",
@@ -104,7 +105,7 @@ def render_sidebar() -> None:
             user = st.session_state.user
             st.success(f"{user['username']}님 로그인 중")
             st.caption(user["email"])
-            st.session_state.page = st.radio("메뉴", ["대시보드", "내 정보 입력", "내 DB 조회"])
+            st.session_state.page = st.radio("메뉴", ["대시보드", "내 정보 입력", "내 DB 조회", "설문 참여"])
             st.divider()
             if st.button("로그아웃", use_container_width=True):
                 logout()
@@ -200,7 +201,7 @@ else:
                 st.video(url)
         with col2:
             with st.expander("Tips...", expanded=True):
-                st.write("왼쪽 메뉴에서 정보 입력과 DB 조회를 이용할 수 있습니다.")
+                st.write("왼쪽 메뉴에서 정보 입력, DB 조회, 설문 참여를 이용할 수 있습니다.")
 
     elif st.session_state.page == "내 정보 입력":
         st.subheader("내 정보 입력")
@@ -236,4 +237,8 @@ else:
             except (FileNotFoundError, pd.errors.EmptyDataError):
                 st.info("data.csv가 없거나 비어 있습니다.")
 
+    elif st.session_state.page == "설문 참여":
+        render_survey_page(user)
+
 st.markdown('<div class="footer">MyProject · Streamlit + SQLite</div>', unsafe_allow_html=True)
+import streamlit.components.v1 as components
